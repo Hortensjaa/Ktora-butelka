@@ -1,0 +1,295 @@
+#:import get_color_from_hex kivy.utils.get_color_from_hex
+#:import Gradient kivy_gradient.Gradient
+
+<Menu>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: Gradient.vertical(get_color_from_hex("ba7481"), get_color_from_hex("c0c0c0"), get_color_from_hex("ba7481"))
+    AnchorLayout:
+        anchor_x: "center"
+        anchor_y: "bottom"
+        padding: ("20dp","20dp","20dp","20dp")
+        BoxLayout:
+            orientation: "vertical"
+            spacing: "30dp"
+            size_hint: .95, .95
+            Label:
+                text: "Która butelka?"
+                size: "100dp", "100dp"
+                font_size: "50dp"
+                color: get_color_from_hex("b01030")
+                text_size: self.width, None
+                height: self.texture_size[1]
+                halign: 'center'
+            BoxLayout:
+                orientation: "vertical"
+                spacing: "5dp"
+                Button:
+                    text: "Zaczynajmy!"
+                    on_press: root.manager.current = 'wiek'
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+                Button:
+                    text: "O grze"
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+                Button:
+                    text: "Ustawienia"
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+                Button:
+                    text: "Wyjdź z gry"
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+
+<Wiek>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: Gradient.vertical(get_color_from_hex("ba7481"), get_color_from_hex("c0c0c0"), get_color_from_hex("ba7481"))
+    BoxLayout:
+        padding: ("20dp","20dp","20dp","20dp")
+        orientation: "vertical"
+        Label:
+            text: "Gra zawiera elementy, które mogą być nieodpowiednie dla niepełnoletnich. \nPotwierdź, że masz 18 lat:"
+            font_size: "20dp"
+            text_size: self.width, None
+            height: self.texture_size[1]
+            halign: 'center'
+        Label:
+            text: root.wiek_gracza
+            color: get_color_from_hex("b01030")
+            font_size: "20dp"
+        Slider:
+            min: 12
+            max: 40
+            value: 18
+            step: 1
+            orientation: "horizontal"
+            on_value: root.Wybor_wieku(self)
+            cursor_size: ("20dp","20dp")
+
+        Button:
+            text: root.t
+            disabled: not root.pelnoletni
+            on_press: root.manager.current = 'imiona'
+            background_normal: ''
+            background_color: get_color_from_hex("b01030")
+
+<Imiona>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: Gradient.vertical(get_color_from_hex("ba7481"), get_color_from_hex("c0c0c0"), get_color_from_hex("ba7481"))
+    BoxLayout:
+        orientation: "vertical"
+        padding: ("20dp","20dp","20dp","20dp")
+        spacing: "20dp"
+        Label:
+            text: "Wpiszcie swoje imiona"
+            font_size: "30dp"
+            text_size: self.width, None
+            height: self.texture_size[1]
+            halign: 'center'
+            color: get_color_from_hex("b01030")
+        GridLayout:
+            size_hint: 1, .7
+            cols: 2
+            spacing: "20dp"
+            Label:
+                text: "Pierwsza osoba"
+                color: get_color_from_hex("b01030")
+            Label:
+                text: "Druga osoba"
+                color: get_color_from_hex("b01030")
+            TextInput:
+                id: pierwsza
+                text:
+                multiline: False
+                on_text_validate: root.wpisanie_imienia1(self)
+            TextInput:
+                id: druga
+                text:
+                multiline: False
+                on_text_validate: root.wpisanie_imienia2(self)
+        Button:
+            pos_hint: {"center_x": 0.5}
+            size_hint: .7, .3
+            text: root.imie1 + " i " + root.imie2 + " grają!"
+            disabled: not root.s1 or not root.s2
+            disabled_color: 0,0,0,0
+            background_color: 0,0,0,0
+            on_press: root.manager.current = 'pytania_pf'
+
+<Pytania_pf>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: Gradient.vertical(get_color_from_hex("ba7481"), get_color_from_hex("c0c0c0"), get_color_from_hex("ba7481"))
+    BoxLayout:
+        orientation: "vertical"
+        padding: ("20dp","20dp","20dp","20dp")
+        BoxLayout:
+            size_hint: 1, .1
+            Label:
+                id: imie1
+                text: ""
+            Label:
+                id: punkty1
+                text: str(root.p1)
+            Label:
+                id: imie2
+                text: ""
+            Label:
+                id: punkty2
+                text: str(root.p2)
+        MDProgressBar:
+            value: 50
+            color: get_color_from_hex("b01030")
+            size_hint: 1, .2
+            value: root.pb.value
+        Label:
+            id: ktogra
+            size_hint: 1, .1
+            text: ""
+            text_size: self.size
+            halign: "left"
+        Label:
+            text: root.pytanko
+            text_size: self.width, None
+            height: self.texture_size[1]
+            halign: 'center'
+            color: get_color_from_hex("b01030")
+        BoxLayout:
+            size_hint: 1, .3
+            spacing: "20dp"
+            orientation: "horizontal"
+            Button:
+                text: "PRAWDA"
+                on_press: root.p_click()
+                background_normal: ''
+                background_color: get_color_from_hex("b01030")
+            Button:
+                text: "FAŁSZ"
+                on_press: root.f_click()
+                background_normal: ''
+                background_color: get_color_from_hex("b01030")
+    BoxLayout:
+        id: butelka
+        orientation: "vertical"
+        canvas.before:
+            Color:
+                rgb:  get_color_from_hex("b01030")
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            text: "Butelka wypita?"
+        BoxLayout:
+            Button:
+                text: "Tak!"
+                on_press: root.nastepna()
+                background_normal: ''
+                background_color: get_color_from_hex("b01030")
+                font_color: get_color_from_hex("b01030")
+            Button:
+                text: "Jeszcze nie"
+                on_press: root.jeszcze()
+                background_color: 1,1,1,1
+                font_color: get_color_from_hex("b01030")
+    Button:
+        id: instrukcja
+        text: 'W pytaniach prawda/fałsz pierwsza osoba odpowiada na pytania na temat drugiej. \nJeśli odpowie poprawnie, kliknijcie przycisk "PRAWDA". \nJeśli nie, kliknijcie "FAŁSZ".'
+        on_press: root.ukryj()
+        on_press: root.ids.imie1.text = root.manager.get_screen("imiona").ids.pierwsza.text
+        on_press: root.ids.imie2.text = root.manager.get_screen("imiona").ids.druga.text
+        on_press: root.zmiana_imienia()
+        background_normal: ''
+        background_color: get_color_from_hex("b01030")
+        padding: ("20dp","20dp")
+        text_size: self.width, None
+        height: self.texture_size[1]
+        halign: 'center'
+
+<Pytania_tj>:
+    canvas:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: Gradient.vertical(get_color_from_hex("ba7481"), get_color_from_hex("c0c0c0"), get_color_from_hex("ba7481"))
+    BoxLayout:
+        orientation: "vertical"
+        padding: ("20dp","20dp","20dp","20dp")
+        Label:
+            size_hint: 1, .05
+            text: "Punkty zgodności: " + str(root.pz)
+        MDProgressBar:
+            value: 50
+            color: get_color_from_hex("b01030")
+            value: root.pb.value
+            size_hint: 1, .1
+        BoxLayout:
+            orientation: "horizontal"
+            spacing: "15dp"
+            BoxLayout:
+                size_hint: .5, 1
+                spacing: "20dp"
+                orientation: "vertical"
+                ToggleButton: #1
+                    id: tb1
+                    text: "imie pierwszej osoby"
+                    on_state: root.da2()
+                    disabled: not root.ea1 or not root.ea2
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+                ToggleButton: #2
+                    id: tb2
+                    text: "imie drugiej osoby"
+                    on_state: root.da1()
+                    disabled: not root.ea1 or not root.ea2
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+            Label:
+                text: root.pytanko
+                text_size: self.width, None
+                height: self.texture_size[1]
+                halign: 'center'
+                color: get_color_from_hex("b01030")
+            BoxLayout:
+                spacing: "20dp"
+                size_hint: .5, 1
+                orientation: "vertical"
+                ToggleButton: #3
+                    id: tb3
+                    text: "imie pierwszej osoby"
+                    on_state: root.da4()
+                    disabled: not root.ea3 or not root.ea4
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+                ToggleButton: #4
+                    id: tb4
+                    text: "imie drugiej osoby"
+                    on_state: root.da3()
+                    disabled: not root.ea3 or not root.ea4
+                    background_normal: ''
+                    background_color: get_color_from_hex("b01030")
+    Button:
+        id: instrukcja
+        text: "Połóżcie telefon między sobą tak, aby każda z was mogła klikać. \nPo jednej stronie ekranu znajdują się przyciski do głosowania dla pierwszej osoby, po drugiej - dla drugiej. \nPunkty zgodności pokazują, ile razy zagłosowałyście tak samo"
+        on_press: root.ukryj()
+        on_press: root.ids.tb1.text = root.manager.get_screen("imiona").ids.pierwsza.text
+        on_press: root.ids.tb3.text = root.manager.get_screen("imiona").ids.pierwsza.text
+        on_press: root.ids.tb2.text = root.manager.get_screen("imiona").ids.druga.text
+        on_press: root.ids.tb4.text = root.manager.get_screen("imiona").ids.druga.text
+        background_normal: ''
+        background_color: get_color_from_hex("b01030")
+        padding: ("20dp","20dp")
+        text_size: self.width, None
+        height: self.texture_size[1]
+        halign: 'center'
+
