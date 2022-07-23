@@ -1,7 +1,7 @@
+from random import choice
 from kivy.properties import StringProperty, BooleanProperty, Clock, NumericProperty, ListProperty
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import Screen, ScreenManager
-from random import choice
 from kivy.core.window import Window
 from kivymd.app import MDApp
 
